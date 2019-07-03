@@ -26,28 +26,20 @@
 
 - 欢迎界面
 
-![欢迎界面](http://7xj2yt.com1.z0.glb.clouddn.com/app_欢迎界面.png)
 
 - 登录界面
 
-![登录界面](http://7xj2yt.com1.z0.glb.clouddn.com/app_登录.png)
 
 - 注册界面
 
-![注册界面](http://7xj2yt.com1.z0.glb.clouddn.com/app_注册.png)
 
 - 控制界面
 
-![控制界面](http://7xj2yt.com1.z0.glb.clouddn.com/app_控制界面.png)
-
 - 支付宝/网银充值界面
 
-![支付宝/网银充值界面](http://7xj2yt.com1.z0.glb.clouddn.com/app_支付宝网银充值.png)
 
 - 充值界面
 
-![充值界面](http://7xj2yt.com1.z0.glb.clouddn.com/app_充值.png)
 
 - 充值卡充值界面
 
-![充值卡充值界面](http://7xj2yt.com1.z0.glb.clouddn.com/app_登录.png)
