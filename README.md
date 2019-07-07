@@ -1,5 +1,5 @@
 Travis status:
-[![Build Status][(https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master)](https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master)
+[![Build Status](https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master)](https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master)
 
 https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master
 
