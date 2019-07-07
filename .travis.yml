@@ -1,5 +1,6 @@
 # 声明构建语言环境
 language: android
+jdk: oraclejdk8
 android:        # 配置信息
     - tools
     - platform-tools
@@ -10,7 +11,7 @@ android:        # 配置信息
       - google-gdk-license-.+
   components:
     # 你可能需要修改下面两项的版本
-    - build-tools-26.0.1
+    - build-tools-25.0.1
     - android-25
       # Android Support Repository
     - extra-android-m2repository
