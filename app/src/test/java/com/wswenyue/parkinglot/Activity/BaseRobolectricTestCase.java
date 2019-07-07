@@ -16,6 +16,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
+<<<<<<< HEAD
 import rx.Scheduler;
 import rx.android.plugins.RxAndroidPlugins;
 import rx.android.plugins.RxAndroidSchedulersHook;
@@ -23,6 +24,8 @@ import rx.plugins.RxJavaPlugins;
 import rx.plugins.RxJavaSchedulersHook;
 import rx.schedulers.Schedulers;
 
+=======
+>>>>>>> 6e0d5d5b045603eb42698b7203189dbc3c6a9a8d
 
 @RunWith(RobolectricTestRunner.class)
 @Config(shadows = {ShadowLog.class}, constants = BuildConfig.class, sdk = 23)
@@ -54,6 +57,7 @@ public abstract class BaseRobolectricTestCase {
 
     private void initRxJava() {
 
+<<<<<<< HEAD
         RxJavaPlugins.getInstance().registerSchedulersHook(new RxJavaSchedulersHook() {
             @Override
             public Scheduler getIOScheduler() {
@@ -66,6 +70,20 @@ public abstract class BaseRobolectricTestCase {
                 return Schedulers.immediate();
             }
         });
+=======
+//        RxJavaPlugins.getInstance().registerSchedulersHook(new RxJavaSchedulersHook() {
+//            @Override
+//            public Scheduler getIOScheduler() {
+//                return Schedulers.immediate();
+//            }
+//        });
+//        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
+//            @Override
+//            public Scheduler getMainThreadScheduler() {
+//                return Schedulers.immediate();
+//            }
+//        });
+>>>>>>> 6e0d5d5b045603eb42698b7203189dbc3c6a9a8d
     }
 
 }
