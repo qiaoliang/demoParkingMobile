@@ -1,23 +1,33 @@
+# 声明构建语言环境
 language: android
 jdk: oraclejdk8
-sudo: false
-
 android:
   components:
-    - tools
-    - build-tools-25.0.2
-    - android-25
-    - extra-android-m2repository
-    - extra-android-support
+    - build-tools-26.0.2
+    - android-26
+    - add-on
+    - extra
   licenses:
-      - android-sdk-license-.+
-      - '.+'
-
-before_install:
-  - chmod +x gradlew
-  - mkdir "$ANDROID_HOME/licenses" || true
-  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
 
 script:
+  # 生成 APK
   - ./gradlew assembleRelease
+
+# 部署
+deploy:
+  # 部署到GitHub Release。
+  # 除此之外，Travis CI还支持发布到fir.im、AWS、Google App Engine等
+  provider: releases
+  # Github oauth token
+  api_key: "GITHUB OAUTH TOKEN"
+  # 部署文件路径；对于Android就部署生成的 apk 文件
+  file: "FILE TO UPLOAD"
+  # 避免 Travis CI在部署之前清空生成的APK文件
+  skip_cleanup: true
+  # 发布时机
+  on:
+    # tags设置为true表示只有在有tag的情况下才部署
+    tags: true
