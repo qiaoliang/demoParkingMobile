@@ -1,3 +1,8 @@
+Travis status:
+[![Build Status][(https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master)](https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master)
+
+https://travis-ci.org/qiaoliang/demoParkingMobile.svg?branch=master
+
 #智能自助式停车场---安卓手机端设计
 
 ### 主要功能为：
