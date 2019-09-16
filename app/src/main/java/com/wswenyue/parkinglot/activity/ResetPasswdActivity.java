@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.wswenyue.parkinglot.R;
 import com.wswenyue.parkinglot.constant.Constant;
+import com.wswenyue.parkinglot.domain.UserLoginInfo;
 import com.wswenyue.parkinglot.service.MyService;
 
 public class ResetPasswdActivity extends Activity {
@@ -27,9 +28,11 @@ public class ResetPasswdActivity extends Activity {
     //定义界面上的按钮
     private Button reset;
 
-    private Intent intent = null;
-    private StringBuffer sb = null;
+    private StringBuffer sb;
 
+    public ResetPasswdActivity() {
+        sb = null;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,36 +67,35 @@ public class ResetPasswdActivity extends Activity {
         uConfirmPasswd = confirmPasswd.getText().toString().trim();
         uphone = phone.getText().toString().trim();
         umail = email.getText().toString().trim();
+        UserLoginInfo userLoginInfo = com.wswenyue.parkinglot.domain.UserLoginInfo.createUserLoginInfo(uNewPasswd, uConfirmPasswd, uphone, umail);
         //判断是否为空
-        if(isNotNull()){
-            if(uNewPasswd.equals(uConfirmPasswd)){
+        if(userLoginInfo.isValid()){
+            if(userLoginInfo.canChangePassword()){
                 reset();
-                Toast.makeText(ResetPasswdActivity.this, "修改中...", Toast.LENGTH_SHORT).show();
+                showMessageToast("修改中...");
 
-                intent = new Intent(ResetPasswdActivity.this,LoginActivity.class);
+                Intent intent = new Intent(ResetPasswdActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
 
             }else {
-                Toast.makeText(ResetPasswdActivity.this, "密码输入不一致，请重新输入", Toast.LENGTH_SHORT).show();
-                newPasswd.setText("");
-                confirmPasswd.setText("");
+                showMessageToast("密码输入不一致，请重新输入");
+                refreshInput();
             }
 
         }else {
-            Toast.makeText(ResetPasswdActivity.this, "所有信息均为必填项", Toast.LENGTH_SHORT).show();
+            showMessageToast("所有信息均为必填项");
         }
 
     }
 
-    public boolean isNotNull() {
-        if ("".equals(uNewPasswd) || uNewPasswd == null ||
-                "".equals(uConfirmPasswd) || uConfirmPasswd == null ||
-                "".equals(uphone) || uphone == null ||
-                "".equals(umail) || umail == null) {
-            return false;
-        }
-        return true;
+    private void refreshInput() {
+        newPasswd.setText("");
+        confirmPasswd.setText("");
+    }
+
+    private void showMessageToast(String s) {
+        Toast.makeText(ResetPasswdActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 
     public void reset(){
@@ -115,12 +117,12 @@ public class ResetPasswdActivity extends Activity {
             String MsgStr = intent.getStringExtra("msg");
             Log.i("收到来自服务器的消息", MsgStr);
             if(MsgStr.equals(Constant.Rsset_Succeed)){
-                Toast.makeText(ResetPasswdActivity.this, "重置密码成功", Toast.LENGTH_SHORT).show();
+                showMessageToast("重置密码成功");
                 intent = new Intent(ResetPasswdActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
             }else {
-                Toast.makeText(ResetPasswdActivity.this,"网络故障。。。",Toast.LENGTH_SHORT).show();
+                showMessageToast("网络故障。。。");
             }
         }
     }
