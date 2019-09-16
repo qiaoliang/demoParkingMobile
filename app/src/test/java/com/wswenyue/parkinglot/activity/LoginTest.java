@@ -1,18 +1,7 @@
-package com.wswenyue.parkinglot.Activity;
+package com.wswenyue.parkinglot.activity;
 
-import android.content.Intent;
-
-import com.wswenyue.parkinglot.BuildConfig;
-
-import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.Shadows;
-import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowActivity;
 
 import static org.junit.Assert.*;
 

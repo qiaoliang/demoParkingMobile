@@ -1,4 +1,4 @@
-package com.wswenyue.parkinglot.Activity;
+package com.wswenyue.parkinglot.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
