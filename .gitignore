@@ -1,3 +1,5 @@
+app/*.iml
+app/*.iml.bak
 *.iml
 .idea/
 .gradle

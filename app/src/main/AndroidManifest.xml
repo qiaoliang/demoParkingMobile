@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wswenyue.parkinglot" >
-    //网络接入权限
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.wswenyue.parkinglot"
+    android:versionCode="1"
+    android:versionName="1.0"
+    tools:ignore="GradleOverrides">
     <uses-permission android:name="ANDROID.PERMISSION.INTERNET" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.write_external_storage" />
@@ -19,8 +22,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/parking_lot"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        //欢迎界面
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".Activity.Appstart"
             android:label="@string/title_activity_appstart" >
@@ -30,22 +34,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        //操作界面
+
         <activity
             android:name=".Activity.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
-        //登陆界面
+
         <activity
             android:name=".Activity.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
-        //注册界面
+
         <activity
             android:name=".Activity.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
-        //找回密码
+
         <activity
             android:name=".Activity.ResetPasswdActivity"
             android:label="@string/title_activity_reset_passwd" >
@@ -53,8 +57,7 @@
 
         <service
             android:name=".service.MyService"
-            android:enabled="true"
-            android:exported="true" >
+            android:enabled="true">
         </service>
 
         <activity

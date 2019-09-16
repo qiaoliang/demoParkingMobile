@@ -1,5 +1,6 @@
 package com.wswenyue.parkinglot.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -219,6 +220,7 @@ public class MyService extends Service implements Runnable {
         super.onCreate();
         // connectService();
         new Thread(new Runnable() {
+            @SuppressLint("HandlerLeak")
             @Override
             public void run() {
                 Looper.prepare();
