@@ -61,4 +61,5 @@ public  class Constant {
     /** */
     public static final String TAG_CONNECTFAILURE = "CONNECT_FAILURE";
     public static final String TAG_FAILURE = "FAILURE";
+    public static final String PROTOCOLSEPPERATOR = "#";
 }

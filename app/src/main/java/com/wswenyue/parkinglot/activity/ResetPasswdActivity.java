@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,20 +19,15 @@ import com.wswenyue.parkinglot.constant.Constant;
 import com.wswenyue.parkinglot.domain.UserLoginInfo;
 import com.wswenyue.parkinglot.service.MyService;
 
+import static com.wswenyue.parkinglot.domain.UserLoginInfo.createUserLoginInfo;
+
 public class ResetPasswdActivity extends Activity {
-    //定义界面上的UserName和Passwd文本框
-    private EditText newPasswd,confirmPasswd,phone,email;
-    private String uNewPasswd = null;
-    private String uConfirmPasswd = null;
-    private String uphone = null;
-    private String umail = null;
+    private EditText newPasswd, confirmPasswd, phone, email;
     //定义界面上的按钮
     private Button reset;
 
-    private StringBuffer sb;
-
     public ResetPasswdActivity() {
-        sb = null;
+
     }
 
     @Override
@@ -61,35 +57,40 @@ public class ResetPasswdActivity extends Activity {
         super.onPause();
     }
 
-    public void resetPasswd(View v){
-        // 处理重置密码任务
-        uNewPasswd = newPasswd.getText().toString().trim();
-        uConfirmPasswd = confirmPasswd.getText().toString().trim();
-        uphone = phone.getText().toString().trim();
-        umail = email.getText().toString().trim();
-        UserLoginInfo userLoginInfo = com.wswenyue.parkinglot.domain.UserLoginInfo.createUserLoginInfo(uNewPasswd, uConfirmPasswd, uphone, umail);
+    public void resetPasswd(View v) {
+        String newPassword = newPasswd.getText().toString().trim();
+        String confirmedPassword = confirmPasswd.getText().toString().trim();
+        String phoneNumber = phone.getText().toString().trim();
+        String email = this.email.getText().toString().trim();
+        UserLoginInfo userLoginInfo = createUserLoginInfo(newPassword, confirmedPassword, phoneNumber, email);
         //判断是否为空
-        if(userLoginInfo.isValid()){
-            if(userLoginInfo.canChangePassword()){
-                reset();
-                showMessageToast("修改中...");
-
-                Intent intent = new Intent(ResetPasswdActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-
-            }else {
-                showMessageToast("密码输入不一致，请重新输入");
-                refreshInput();
-            }
-
-        }else {
+        if (!userLoginInfo.isValid()) {
             showMessageToast("所有信息均为必填项");
+            return;
         }
+        if (userLoginInfo.canChangePassword()) {
+            String encodedMessageString = userLoginInfo.assemblingMessage();
+            Message message = createMessageToSend(encodedMessageString);
+            sendResetpasswordCommand(message);
+            showMessageToast("修改中...");
+
+            Intent intent = new Intent(ResetPasswdActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+
+        } else {
+            showMessageToast("密码输入不一致，请重新输入");
+            cleanupPasswordInputBox();
+        }
+
 
     }
 
-    private void refreshInput() {
+    private boolean sendResetpasswordCommand(Message message) {
+        return MyService.revHandler.sendMessage(message);
+    }
+
+    private void cleanupPasswordInputBox() {
         newPasswd.setText("");
         confirmPasswd.setText("");
     }
@@ -98,17 +99,16 @@ public class ResetPasswdActivity extends Activity {
         Toast.makeText(ResetPasswdActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 
-    public void reset(){
+    @NonNull
+    private Message createMessageToSend(String encodedMessageString) {
         Message message = new Message();
         message.what = Constant.MSG_WHAT_SENDMSG;
-        sb = new StringBuffer();
-        sb.append(Constant.Reset).append("#").append(uNewPasswd)
-                .append("#").append(umail).append("#").append(uphone);
-        message.obj = sb.toString();
-        MyService.revHandler.sendMessage(message);
+        message.obj = encodedMessageString;
+        return message;
     }
 
     BroadcastMain receiver;
+
     //内部类，实现BroadcastReceiver
     public class BroadcastMain extends BroadcastReceiver {
         //必须要重载的方法，用来监听是否有广播发送
@@ -116,12 +116,12 @@ public class ResetPasswdActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             String MsgStr = intent.getStringExtra("msg");
             Log.i("收到来自服务器的消息", MsgStr);
-            if(MsgStr.equals(Constant.Rsset_Succeed)){
+            if (MsgStr.equals(Constant.Rsset_Succeed)) {
                 showMessageToast("重置密码成功");
-                intent = new Intent(ResetPasswdActivity.this,LoginActivity.class);
+                intent = new Intent(ResetPasswdActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
-            }else {
+            } else {
                 showMessageToast("网络故障。。。");
             }
         }

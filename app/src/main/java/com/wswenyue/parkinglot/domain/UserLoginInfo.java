@@ -1,5 +1,11 @@
 package com.wswenyue.parkinglot.domain;
 
+import android.support.annotation.NonNull;
+
+import com.wswenyue.parkinglot.constant.Constant;
+
+import static com.wswenyue.parkinglot.constant.Constant.PROTOCOLSEPPERATOR;
+
 public class UserLoginInfo {
     private String uNewPasswd = null;
     private String uConfirmPasswd = null;
@@ -29,4 +35,11 @@ public class UserLoginInfo {
         return new com.wswenyue.parkinglot.domain.UserLoginInfo(uNewPasswd, uConfirmPasswd, uphone, umail);
     }
 
+    @NonNull
+    public String assemblingMessage() {
+        StringBuffer messageCode = new StringBuffer();
+        messageCode.append(Constant.Reset).append(PROTOCOLSEPPERATOR).append(uNewPasswd)
+                .append(PROTOCOLSEPPERATOR).append(umail).append(PROTOCOLSEPPERATOR).append(uphone);
+        return messageCode.toString();
+    }
 }
