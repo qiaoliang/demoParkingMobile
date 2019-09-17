@@ -16,7 +16,7 @@ public class LoginTest extends BaseRobolectricTestCase {
         LoginActivity loginActivity = Robolectric.buildActivity(LoginActivity.class).create().get();
         assertNotNull(loginActivity);
         assertEquals(loginActivity.getTitle(), "SimpleActivity");
-        loginActivity.CheckUser();
+        loginActivity.askForLogin(null);
 //        Intent expectedIntent = new Intent(loginActivity, HelpActivity.class);
 //        ShadowActivity shadowActivity = Shadows.shadowOf(loginActivity);
 //        Intent actualIntent = shadowActivity.getNextStartedActivity();

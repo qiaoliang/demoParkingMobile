@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.wswenyue.parkinglot.R;
 import com.wswenyue.parkinglot.constant.Constant;
 import com.wswenyue.parkinglot.domain.UserLoginInfo;
-import com.wswenyue.parkinglot.service.MyService;
+import com.wswenyue.parkinglot.service.BackendService;
 
 import static com.wswenyue.parkinglot.domain.UserLoginInfo.createUserLoginInfo;
 
@@ -62,14 +62,14 @@ public class ResetPasswdActivity extends Activity {
         String confirmedPassword = confirmPasswd.getText().toString().trim();
         String phoneNumber = phone.getText().toString().trim();
         String email = this.email.getText().toString().trim();
-        UserLoginInfo userLoginInfo = createUserLoginInfo(newPassword, confirmedPassword, phoneNumber, email);
+        UserLoginInfo userLoginInfo = createUserLoginInfo("", newPassword, confirmedPassword, phoneNumber, email);
         //判断是否为空
         if (!userLoginInfo.isValid()) {
             showMessageToast("所有信息均为必填项");
             return;
         }
         if (userLoginInfo.canChangePassword()) {
-            String encodedMessageString = userLoginInfo.assemblingMessage();
+            String encodedMessageString = userLoginInfo.assemblingMessageForResetPassword();
             Message message = createMessageToSend(encodedMessageString);
             sendResetpasswordCommand(message);
             showMessageToast("修改中...");
@@ -87,7 +87,7 @@ public class ResetPasswdActivity extends Activity {
     }
 
     private boolean sendResetpasswordCommand(Message message) {
-        return MyService.revHandler.sendMessage(message);
+        return BackendService.revHandler.sendMessage(message);
     }
 
     private void cleanupPasswordInputBox() {

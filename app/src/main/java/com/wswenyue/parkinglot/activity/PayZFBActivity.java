@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.wswenyue.parkinglot.R;
 import com.wswenyue.parkinglot.constant.Constant;
-import com.wswenyue.parkinglot.service.MyService;
+import com.wswenyue.parkinglot.service.BackendService;
 
 public class PayZFBActivity extends BasicActivity {
     private Button btOk, btCancel;
@@ -89,7 +89,7 @@ public class PayZFBActivity extends BasicActivity {
         sb.append(Constant.Pay_ZFB).append("#").append(uname)
                 .append("#").append(Money).append("#").append(Passwd);
         message.obj = sb.toString();
-        MyService.revHandler.sendMessage(message);
+        BackendService.revHandler.sendMessage(message);
     }
 
     BroadcastMain receiver;

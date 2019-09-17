@@ -56,7 +56,7 @@
         </activity>
 
         <service
-            android:name=".service.MyService"
+            android:name=".service.BackendService"
             android:enabled="true">
         </service>
 

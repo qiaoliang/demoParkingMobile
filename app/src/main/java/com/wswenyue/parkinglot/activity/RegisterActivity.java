@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.wswenyue.parkinglot.R;
 import com.wswenyue.parkinglot.constant.Constant;
-import com.wswenyue.parkinglot.service.MyService;
+import com.wswenyue.parkinglot.service.BackendService;
 
 public class RegisterActivity extends Activity {
     //定义界面上的UserName和Passwd文本框
@@ -97,7 +97,7 @@ public class RegisterActivity extends Activity {
                 .append("#").append(upasswd).append("#")
                 .append(umail).append("#").append(uphone);
         message.obj = sb.toString();
-        MyService.revHandler.sendMessage(message);
+        BackendService.revHandler.sendMessage(message);
     }
 
 

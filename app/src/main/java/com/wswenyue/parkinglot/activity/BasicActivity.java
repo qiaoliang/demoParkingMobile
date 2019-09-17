@@ -9,31 +9,33 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
 
-import com.wswenyue.parkinglot.service.MyService;
+import com.wswenyue.parkinglot.service.BackendService;
+
+import static java.lang.System.currentTimeMillis;
 
 public class BasicActivity extends Activity {
 
-    MyService myService ;
+    BackendService backendService;
     private long exitTime = 0;
 
-    public ServiceConnection myServiceConnection = new ServiceConnection() {
+    public ServiceConnection serviceConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName arg0, IBinder service) {
-            myService = ((MyService.InterBinder) service).getService();
+            backendService = ((BackendService.InterBinder) service).getService();
         }
 
         public void onServiceDisconnected(ComponentName arg0) {
 
-            myService = null;
+            backendService = null;
         }
 
     };
 
     @Override
     public void onBackPressed() {
-        if((System.currentTimeMillis() - exitTime) > 2000){
-            Toast.makeText(this, "再次按返回键退出", Toast.LENGTH_SHORT).show();
-            exitTime = System.currentTimeMillis();
+        if((currentTimeMillis() - exitTime) > 2000){
+            showMessageToast();
+            exitTime = currentTimeMillis();
         }else{
             super.onBackPressed();
         }
@@ -42,14 +44,18 @@ public class BasicActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bindService(new Intent(BasicActivity.this, MyService.class),
-                myServiceConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(BasicActivity.this, BackendService.class),
+                serviceConnection, Context.BIND_AUTO_CREATE);
 
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(myServiceConnection);
+        unbindService(serviceConnection);
+    }
+
+    private void showMessageToast() {
+        Toast.makeText(this, "再次按返回键退出", Toast.LENGTH_SHORT).show();
     }
 }

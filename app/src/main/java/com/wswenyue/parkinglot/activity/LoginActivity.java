@@ -15,44 +15,40 @@ import android.widget.Toast;
 
 import com.wswenyue.parkinglot.R;
 import com.wswenyue.parkinglot.constant.Constant;
-import com.wswenyue.parkinglot.service.MyService;
+import com.wswenyue.parkinglot.domain.UserLoginInfo;
+import com.wswenyue.parkinglot.service.BackendService;
 
 public class LoginActivity extends BasicActivity {
 
-    //定义界面上的UserName和Passwd文本框
-    private EditText userName, passwd;
+    private EditText userNameTextBox, passwdTextBox;
     private String uname = "";
     private String upasswd = "";
-    //定义界面上的三个按钮
-    private Button login ;
-    private Button forgetPassword;
-    private Button register;
-    private Intent intent = null;
-
-
-    private StringBuffer sb = null;
-
-
-
+    private Button loginButton = null ;
+    private Button forgetPasswordButton = null;
+    private Button registerButton = null;
+    BroadcastMain receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //获取界面上的两个文本框
-        userName = (EditText) findViewById(R.id.usernameView);
-        passwd = (EditText) findViewById(R.id.passwordView);
-        //获取界面上的三个按钮
-        login = (Button) findViewById(R.id.login_bt);
-        forgetPassword = (Button) findViewById(R.id.bt_forgetPassword);
-        register = (Button) findViewById(R.id.register_bt);
+        userNameTextBox = findViewById(R.id.usernameView);
+        passwdTextBox = findViewById(R.id.passwordView);
+
+        loginButton = findViewById(R.id.login_bt);
+        forgetPasswordButton = findViewById(R.id.bt_forgetPassword);
+        registerButton = findViewById(R.id.register_bt);
 
         receiver = new BroadcastMain();
-        //新添代码，在代码中注册广播接收程序
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constant.BroadCastSend);
+        IntentFilter filter = createIntentFilter();
         registerReceiver(receiver, filter);
 
+    }
+
+    private IntentFilter createIntentFilter() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.BroadCastSend);
+        return filter;
     }
 
     @Override
@@ -62,50 +58,42 @@ public class LoginActivity extends BasicActivity {
     }
 
     public void login(View source) {
-        // 处理登陆任务
-        uname = userName.getText().toString().trim();
-        upasswd = passwd.getText().toString().trim();
-        if (isNotNull()) {
-            Log.i("Login", "Login...");
-            CheckUser();
-            Toast.makeText(LoginActivity.this,"Login...",Toast.LENGTH_SHORT).show();
+        uname = userNameTextBox.getText().toString().trim();
+        upasswd = passwdTextBox.getText().toString().trim();
+        UserLoginInfo loginInfo = UserLoginInfo.createUserLoginInfo(uname,upasswd,null,null,null);
+        if (loginInfo.canLogin()) {
+            askForLogin(null);
+            showMessageToast("Login...");
         } else {
-            Toast.makeText(LoginActivity.this, "用户名和密码不能为空", Toast.LENGTH_SHORT).show();
+            showMessageToast("用户名和密码不能为空");
         }
 
+    }
+
+    private void showMessageToast(String s) {
+        Toast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 
     public void forgetPassword(View source) {
-        // 处理重置密码任务
-        intent = new Intent(LoginActivity.this, ResetPasswdActivity.class);
-        startActivity(intent);
-//        finish();
+        startActivity(
+                new Intent(this, ResetPasswdActivity.class));
     }
 
-    public void register(View source) {
-        // 处理注册任务
-        intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
-//        finish();
-    }
-    public boolean isNotNull(){
-        if ("".equals(uname) || uname == null ||
-            "".equals(upasswd) || upasswd == null){
-            return false;
-        }
-        return true;
+    public void startRegister(View source) {
+        startActivity(
+                new Intent(this, RegisterActivity.class));
     }
 
-    public void CheckUser(){
+    public void askForLogin(UserLoginInfo loginInfo){
+        Log.i("Login", "Login...");
+
         Message message = new Message();
         message.what = Constant.MSG_WHAT_SENDMSG;
-        sb = new StringBuffer();
-        sb.append(Constant.Login).append("#").append(uname).append("#").append(upasswd);
-        message.obj = sb.toString();
-        MyService.revHandler.sendMessage(message);
+        message.obj = loginInfo.assemblingMessageForLogin();
+        BackendService.revHandler.sendMessage(message);
     }
 
-    public void saveData(){
+    public void storeUsername(){
         SharedPreferences sharedPreferences =getSharedPreferences("parkinglotInfo",0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if(uname != null && !uname.equals("")){
@@ -114,22 +102,18 @@ public class LoginActivity extends BasicActivity {
         }
     }
 
-    BroadcastMain receiver;
-    //内部类，实现BroadcastReceiver
+
     public class BroadcastMain extends BroadcastReceiver {
-        //必须要重载的方法，用来监听是否有广播发送
         @Override
         public void onReceive(Context context, Intent intent) {
             String MsgStr = intent.getStringExtra("msg");
-
             if(MsgStr.equals(Constant.Login_Succeed)){
-                saveData();
-                Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                storeUsername();
+                showMessageToast("登陆成功");
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             }else if(MsgStr.equals(Constant.Login_Fail)){
-                Toast.makeText(LoginActivity.this,"用户名和密码错误，请核对后登陆",Toast.LENGTH_SHORT).show();
+                showMessageToast("用户名和密码错误，请核对后登陆");
             }
         }
     }

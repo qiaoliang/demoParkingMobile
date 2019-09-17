@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.wswenyue.parkinglot.R;
 import com.wswenyue.parkinglot.constant.Constant;
-import com.wswenyue.parkinglot.service.MyService;
+import com.wswenyue.parkinglot.service.BackendService;
 
 public class PayCZKActivity extends BasicActivity {
 
@@ -93,7 +93,7 @@ public class PayCZKActivity extends BasicActivity {
         sb.append(Constant.Pay_CZK).append("#").append(uname)
                 .append("#").append(CardNum).append("#").append(Passwd);
         message.obj = sb.toString();
-        MyService.revHandler.sendMessage(message);
+        BackendService.revHandler.sendMessage(message);
     }
 
     BroadcastMain receiver;

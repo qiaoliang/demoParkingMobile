@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.wswenyue.parkinglot.R;
 import com.wswenyue.parkinglot.constant.Constant;
-import com.wswenyue.parkinglot.service.MyService;
+import com.wswenyue.parkinglot.service.BackendService;
 
 
 public class MainActivity extends BasicActivity {
@@ -34,19 +34,18 @@ public class MainActivity extends BasicActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btOpen = (Button) this.findViewById(R.id.bt_open);
-        btXiuxi = (Button) this.findViewById(R.id.bt_xiuxi);
-        btYule = (Button) this.findViewById(R.id.bt_yule);
+        btOpen = this.findViewById(R.id.bt_open);
+        btXiuxi = this.findViewById(R.id.bt_xiuxi);
+        btYule = this.findViewById(R.id.bt_yule);
 
-        mHome = (ImageView) this.findViewById(R.id.img_my);
+        mHome = this.findViewById(R.id.img_my);
 
-        //获取用户名
-        getData();
+        getUserName();
 
-        receiver = new BroadcastMain();
         //新添代码，在代码中注册广播接收程序
         IntentFilter filter = new IntentFilter();
         filter.addAction(Constant.BroadCastSend);
+        receiver = new BroadcastMain();
         registerReceiver(receiver, filter);
 
 
@@ -96,7 +95,7 @@ public class MainActivity extends BasicActivity {
         super.onPause();
     }
 
-    public void getData() {
+    public void getUserName() {
         SharedPreferences sharedPreferences = getSharedPreferences("parkinglotInfo", 0);
         uname = sharedPreferences.getString("uname", "");
     }
@@ -105,7 +104,7 @@ public class MainActivity extends BasicActivity {
         Message message = new Message();
         message.what = Constant.MSG_WHAT_SENDMSG;
         message.obj = Constant.CMD + "#" + uname + "#" + cmd;
-        MyService.revHandler.sendMessage(message);
+        BackendService.revHandler.sendMessage(message);
     }
 
 
