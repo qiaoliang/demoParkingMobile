@@ -110,30 +110,35 @@ public class MainActivity extends BasicActivity {
 
 
     BroadcastMain receiver;
-    //内部类，实现BroadcastReceiver
+
     public class BroadcastMain extends BroadcastReceiver {
-        //必须要重载的方法，用来监听是否有广播发送
         @Override
         public void onReceive(Context context, Intent intent) {
             String MsgStr = intent.getStringExtra("msg");
             Log.i("收到来自服务器的消息", MsgStr);
-//            //设置三个按钮可用
-//            btOpen.setClickable(true);
-//            btXiuxi.setClickable(true);
-//            btYule.setClickable(true);
 
-            if(MsgStr.equals(Constant.Authority_Permission_denied)){
-                Toast.makeText(MainActivity.this,"请登录后再操作", Toast.LENGTH_SHORT).show();
-            }else if(MsgStr.equals(Constant.Authority_Not_Allowed)){
-                Toast.makeText(MainActivity.this,"请进入停车场，再操作", Toast.LENGTH_SHORT).show();
+            if(!isLoginedUser(MsgStr)){
+                showToastMessage("请登录后再操作");
+                return;
+            }
+            if(MsgStr.equals(Constant.Authority_Not_Allowed)){
+                showToastMessage("请进入停车场，再操作");
             }else if(MsgStr.equals(Constant.Server_CMD_Execution_Succeed)){
-                Toast.makeText(MainActivity.this,"门已打开，请尽快通过", Toast.LENGTH_SHORT).show();
+                showToastMessage("门已打开，请尽快通过");
             }else if(MsgStr.equals(Constant.Server_CMD_Repuat)){
-                Toast.makeText(MainActivity.this,"您的指令正在执行，请勿重复。", Toast.LENGTH_SHORT).show();
+                showToastMessage("您的指令正在执行，请勿重复。");
             }else if(MsgStr.equals(Constant.Authority_Area_Outside)){
-                Toast.makeText(MainActivity.this,"请到指定区域操作", Toast.LENGTH_SHORT).show();
+                showToastMessage("请到指定区域操作");
             }
         }
+
+        private boolean isLoginedUser(String msgStr) {
+            return !msgStr.equals(Constant.Authority_Permission_denied);
+        }
+        private void showToastMessage(String 请登录后再操作) {
+            Toast.makeText(MainActivity.this, 请登录后再操作, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }
